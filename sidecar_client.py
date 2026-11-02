@@ -88,6 +88,7 @@ def _release_asset() -> str:
 def _gh_logged_in() -> bool:
     return (
         bool(shutil.which("gh"))
+        and subprocess.run(["gh", "attestation", "--help"], capture_output=True, check=False).returncode == 0
         and subprocess.run(["gh", "auth", "status"], capture_output=True, check=False).returncode == 0
     )
 

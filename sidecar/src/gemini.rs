@@ -66,7 +66,13 @@ impl Setup {
             "model": format!("models/{}", self.model),
             "generationConfig": {
                 "responseModalities": ["AUDIO"],
-                "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": self.voice}}},
+                "speechConfig": {
+                    "voiceConfig": if self.voice.starts_with("voice_") || self.voice.starts_with("voicekey_") {
+                        json!({"voice": self.voice})
+                    } else {
+                        json!({"prebuiltVoiceConfig": {"voiceName": self.voice}})
+                    }
+                },
             },
             "systemInstruction": {"parts": [{"text": self.system_instruction}]},
             "inputAudioTranscription": if self.languages.is_empty() {
